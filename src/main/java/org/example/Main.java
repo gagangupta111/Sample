@@ -1,10 +1,7 @@
 
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 class EqualsHashCode{
 
@@ -30,11 +27,70 @@ class EqualsHashCode{
     }
 }
 
+class Employee{
+
+    public Employee(int age, String type) {
+
+        this.age = age;
+        this.type = type;
+
+    }
+
+    public int age;
+    public String type;
+
+    @Override
+    public String toString() {
+        return "age:" + age + " type: " + type;
+    }
+}
+
+
+
 public class Main {
 
-    public static void main(String[] args){
+    public static Integer getRecentMaxRepeatedValue(List<Integer> list){
+
+        Integer maxKey = -1;
+        Integer maxvalue = -1;
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (Integer integer : list){
+
+            if (!map.containsKey(integer)){
+                map.put(integer, 1);
+            }else {
+                map.put(integer, map.get(integer) + 1);
+            }
+
+            if (map.get(integer) >= maxvalue){
+                maxvalue = map.get(integer);
+                maxKey = integer;
+            }
+
+        }
+
+        return maxKey;
+    }
+
+    public static void main(String[] args) {
+
+        // 1,2,3,2,2,3,4,4,5,5 =  2?
+        // maxKey = 4, maxValue = 2
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(2);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(4);
+        list.add(5);
+        list.add(5);
 
 
+        System.out.println(getRecentMaxRepeatedValue(list));
 
     }
 }
