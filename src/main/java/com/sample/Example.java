@@ -1,9 +1,17 @@
 package com.sample;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
+ class RejectedExecutionHandlerImpl implements RejectedExecutionHandler {
+
+    @Override
+    public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+        System.out.println(r.toString() + " is rejected");
+    }
+
+}
 
 public class Example {
 
@@ -14,13 +22,61 @@ public class Example {
         return integer;
     }
 
+    public static void exception(){
+
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+
+        for (String string : list){
+            if (string.equals("a")){
+                list.remove(string);
+            }
+        }
+
+    }
+
+    public static void executorService(){
+
+        //RejectedExecutionHandler implementation
+        RejectedExecutionHandlerImpl rejectionHandler = new RejectedExecutionHandlerImpl();
+        //Get the ThreadFactory implementation to use
+        ThreadFactory threadFactory = Executors.defaultThreadFactory();
+        //creating the ThreadPoolExecutor
+        ThreadPoolExecutor executorPool = new ThreadPoolExecutor(2, 4, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(2), threadFactory, rejectionHandler);
+        //start the monitoring thread
+
+
+    }
+
+
+    public static void exception1(){
+
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+
+        for (int i = 0 ; i < list.size(); i++){
+            if (list.get(i).equals("a")){
+                list.remove(list.get(i));
+            }
+        }
+
+        for (String s : list){
+            System.out.println(s);
+        }
+
+    }
+
     public static void completable() throws Exception {
 
         CompletableFuture<String> greetingFuture = CompletableFuture
                 .supplyAsync(() -> {
             // some async computation
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
                 int value = 10/1;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -34,15 +90,8 @@ public class Example {
                     }else {
                         return result;
                     }
-                });
-
-        while (!greetingFuture.isDone()){
-            Thread.sleep(500);
-            System.out.println("Not Done yet!");
-        }
-
-        System.out.println(greetingFuture.get());
-
+                })
+                .whenComplete((a, b) -> System.out.println("completed with result: " + a));
         CompletableFuture<Integer> future =
                 CompletableFuture.supplyAsync(() -> {
 
@@ -70,9 +119,7 @@ public class Example {
 
         completable();
 
-
     }
-
 }
 
 class ThreadPull implements Runnable{
