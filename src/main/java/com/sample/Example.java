@@ -1,11 +1,13 @@
 package com.sample;
 
-import java.sql.Time;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
- class RejectedExecutionHandlerImpl implements RejectedExecutionHandler {
+import java.util.stream.Collectors;
+
+class RejectedExecutionHandlerImpl implements RejectedExecutionHandler {
 
     @Override
     public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
@@ -67,12 +69,81 @@ class MyObject{}
     }
 }
 
+class TxtReader implements Runnable
+{
+    private String threadName;
+    private String fileName;
+    private CyclicBarrier cb;
+    TxtReader(String threadName, String fileName, CyclicBarrier cb)
+    {
+        this.threadName = threadName;
+        this.fileName = fileName;
+        this.cb = cb;
+    }
+    @Override
+    public void run()
+    {
+        System.out.println("Reading file " + fileName + " thread " + threadName);
+
+        try
+        {
+
+            Thread.sleep(1000);
+
+        //calling await() so the current thread may suspends
+            cb.await();
+
+            System.out.println("Done Reading file " + fileName + " thread " + threadName);
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException e)
+        {
+            System.out.println(e);
+        }
+        catch (BrokenBarrierException e)
+        {
+            System.out.println(e);
+        }
+    }
+}
+
+class AfterAction implements Runnable
+{
+    @Override
+    public void run()
+    {
+        try {
+            Thread.sleep(1000);
+            System.out.println("In after action class, start further processing as all files are read");
+            Thread.sleep(1000);
+        }catch (Exception exception){
+            System.out.println(exception.toString());
+        }
+    }
+}
+
 public class Example {
+
+     public static void cyclicBarrier(){
+
+         CyclicBarrier cb = new CyclicBarrier(4, new AfterAction());
+            //initializing three threads to read 3 different files
+         Thread t1 = new Thread(new TxtReader("thread-1", "file-1", cb));
+         Thread t2 = new Thread(new TxtReader("thread-2", "file-2", cb));
+         Thread t3 = new Thread(new TxtReader("thread-3", "file-3", cb));
+            //start begin execution of threads
+         t1.start();
+         t2.start();
+         t3.start();
+
+         System.out.println("Done ");
+     }
 
     public static void awaitAndBarrier() throws Exception {
 
         int threadCount = 10;
         final ObjectFactory factory = new ObjectFactory();
+
         final CountDownLatch startSignal = new CountDownLatch(1);
         final CountDownLatch stopSignal = new CountDownLatch(threadCount);
         class MyThread extends Thread {
@@ -221,13 +292,14 @@ public class Example {
                 .supplyAsync(() -> {
             // some async computation
             try {
-                Thread.sleep(5000);
-                int value = 10/1;
+                Thread.sleep(1000);
+                int value = 10/0;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             return "Hello from CompletableFuture";
         })
+
                 .exceptionally((ex) -> "exceptionally error")
                 .handle((result, exception) -> {
                     if (exception != null){
@@ -236,7 +308,9 @@ public class Example {
                         return result;
                     }
                 })
-                .whenComplete((a, b) -> System.out.println("completed with result: " + a));
+                .whenComplete((a, b) -> System.out.println("completed with result: " + a + " exception : " + b));
+        System.out.println(greetingFuture.get());
+
         CompletableFuture<Integer> future =
                 CompletableFuture.supplyAsync(() -> {
 
@@ -260,11 +334,58 @@ public class Example {
 
     }
 
+    public static long stream(List<Node> list){
+
+        Instant start = Instant.now();
+        List<Node> newList = list.parallelStream().filter((a) -> a.value % 2 == 0).collect(Collectors.toList());
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        return timeElapsed.toNanos();
+    }
+
     public static void main(String[] args) throws Exception {
 
-        awaitAndBarrier();
+         List<Node> list = new ArrayList<>();
+         for (int i = 0; i < 100; i++) {
+             list.add(new Node(i, null));
+         }
+
+        for (int i = 0; i < 100; i++) {
+            System.out.println(stream(list));
+        }
 
     }
+
+    public static void method1(List<?> list){
+
+         for (Object object : list){
+             System.out.println(object.getClass());
+         }
+    }
+
+
+}
+
+class Generics<E>{
+
+     public E e;
+
+}
+
+class Node implements Cloneable{
+
+     public int value;
+     public Node next;
+
+    public Node(int value, Node next) {
+        this.value = value;
+        this.next = next;
+    }
+
+    public Node clone() throws CloneNotSupportedException {
+        return (Node) super.clone();
+    }
+
 }
 
 class ThreadPull implements Runnable{
