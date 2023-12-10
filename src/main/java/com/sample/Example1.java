@@ -6,7 +6,50 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
+class BuilderClass{
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    public static class Builder{
+
+        private String name;
+
+        public static Builder newInstance(){
+
+            return new Builder();
+
+        }
+
+        public Builder withName(String name){
+            this.name = name;
+            return this;
+        }
+
+        public BuilderClass build(){
+            BuilderClass builderClass = new BuilderClass();
+            builderClass.setName(this.name);
+            return builderClass;
+        }
+
+    }
+
+}
 public class Example1 {
+
+    public static void builder(){
+
+        BuilderClass builderClass = BuilderClass.Builder.newInstance().withName("gagan").build();
+        System.out.println(builderClass.getName());
+
+    }
 
     public static void completableFuture(){
 
@@ -74,7 +117,7 @@ public class Example1 {
 
     public static void main(String[] args){
 
-        multiThread();
+        builder();
     }
 }
 
