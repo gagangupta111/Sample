@@ -1,10 +1,50 @@
 package com.sample;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+
+class Singleton{
+
+    private static int first;
+    private static int second;
+    private static int third;
+
+    private static Singleton singleton;
+
+    public static String getCounts(){
+        return first + "_" + second + "_" + third;
+    }
+
+    public static Singleton getInstance(){
+
+        {
+
+            Long aLong = Thread.currentThread().getId();
+            System.out.println("Stage 1 : Thread:  " + aLong);
+            first++;
+
+            if (singleton == null){
+                System.out.println("Stage 2 : Thread : " + aLong);
+                second++;
+
+                synchronized (Singleton.class){
+
+                    if (singleton == null){
+                        System.out.println("Stage 3 : Thread : " + aLong);
+                        third++;
+
+                        singleton = new Singleton();
+
+                    }
+
+                }
+            }
+        }
+        return singleton;
+
+    }
+
+}
 
 class ResourceQueue{
 
@@ -118,9 +158,42 @@ class AddData implements Runnable{
     }
 }
 
+class SingletonThread implements Callable<String> {
+
+    public Singleton singleton;
+
+    @Override
+    public String call() {
+
+        singleton = Singleton.getInstance();
+        Long aLong = Thread.currentThread().getId();
+        System.out.println("Thread : " + aLong + " Instance: " + singleton);
+        return "";
+    }
+}
+
 public class Example4 {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void singleton() throws Exception{
+
+        ExecutorService executorService = Executors.newFixedThreadPool(40);
+        List<SingletonThread> list = new ArrayList<>();
+        for (int i = 0 ; i < 50;i++){
+            list.add(new SingletonThread());
+        }
+
+        List<Future<String>> result = executorService.invokeAll(list);
+
+        executorService.shutdown();
+        while (!executorService.awaitTermination(10L, TimeUnit.MINUTES)) {
+            Thread.sleep(2000);
+            System.out.println("Not yet. Still waiting for termination");
+        }
+
+        System.out.println(Singleton.getCounts());
+    }
+
+    public static void multiThread() throws Exception{
 
         ResourceQueue resourceQueue = new ResourceQueue(new ArrayList<>());
         Collection<Future<?>> tasks = new LinkedList<Future<?>>();
@@ -148,4 +221,9 @@ public class Example4 {
         }
     }
 
+    public static void main(String[] args) throws Exception {
+
+        singleton();
+
+    }
 }
