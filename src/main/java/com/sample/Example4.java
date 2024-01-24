@@ -16,9 +16,7 @@ class Singleton{
     }
 
     public static Singleton getInstance(){
-
         {
-
             Long aLong = Thread.currentThread().getId();
             System.out.println("Stage 1 : Thread:  " + aLong);
             first++;
