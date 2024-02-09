@@ -1,4 +1,4 @@
-package com.sample1;
+package com.multi.sample1;
 
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;

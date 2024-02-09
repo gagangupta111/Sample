@@ -1,5 +1,6 @@
+/*
 
-package org.example;
+package com.multi;
 
 import java.util.*;
 
@@ -47,7 +48,7 @@ class Employee{
 
 
 
-public class Main {
+public class MultiThreading {
 
     public static Integer getRecentMaxRepeatedValue(List<Integer> list){
 
@@ -131,42 +132,5 @@ class Remover implements Runnable{
 
     }
 }
-
-
-class Queue{
-
-    private List<Integer> queue = new ArrayList<>();
-
-    public synchronized Integer get(){
-
-        while (queue.isEmpty()){
-            try {
-                System.out.println("Waiting get " + Thread.currentThread().getId());
-                Thread.sleep(1000);
-                wait();
-                System.out.println("Out of Waiting get " + Thread.currentThread().getId());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        Integer integer = queue.get(0);
-        return queue.remove(0);
-    }
-
-    public synchronized void put(Integer value){
-
-        while (queue.size() > 5){
-            try {
-                System.out.println("Waiting put " + Thread.currentThread().getId());
-                Thread.sleep(1000);
-                wait();
-                System.out.println("Out of Waiting put " + Thread.currentThread().getId());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        queue.add(value);
-
-    }
 }
+*/

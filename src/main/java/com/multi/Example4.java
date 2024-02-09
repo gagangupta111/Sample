@@ -1,4 +1,4 @@
-package com.sample;
+package com.multi;
 
 import java.util.*;
 import java.util.concurrent.*;

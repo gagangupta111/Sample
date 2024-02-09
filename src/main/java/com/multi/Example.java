@@ -1,4 +1,4 @@
-package com.sample;
+package com.multi;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -466,4 +466,23 @@ class Queue{
         return !queue.isEmpty();
     }
 
+    public synchronized void put(Integer value){
+
+        while (queue.size() > 5){
+            try {
+                System.out.println("Waiting put " + Thread.currentThread().getId());
+                Thread.sleep(1000);
+                wait();
+                System.out.println("Out of Waiting put " + Thread.currentThread().getId());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        queue.add(value);
+
+    }
+
 }
+
+
+

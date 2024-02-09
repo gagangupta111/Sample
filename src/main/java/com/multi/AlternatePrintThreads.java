@@ -1,4 +1,4 @@
-package org.example;
+package com.multi;
 
 import java.util.ArrayList;
 import java.util.List;

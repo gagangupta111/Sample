@@ -1,4 +1,4 @@
-package com.test;
+package com.multi.test;
 
 public class NumberDemo {
 
