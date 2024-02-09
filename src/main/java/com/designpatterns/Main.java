@@ -2,6 +2,8 @@ package com.designpatterns;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 interface Vehicle{
 
@@ -41,13 +43,15 @@ public class Main {
 
     public static void main(String[] args){
 
-        System.out.println("Hello!");
-
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        for (int i = 0 ; i < 10; i++){
+            executorService.submit(() -> {
+                SingletonInnerClass singleton = SingletonInnerClass.getSingleton();
+                System.out.println(singleton);
+            });
+        }
     }
-
 }
-
-
 
  class FinalClass{
 
@@ -80,6 +84,20 @@ class Employee{
     }
 }
 
+class SingletonInnerClass{
+
+    private SingletonInnerClass(){
+
+    }
+
+    private static class SingletonInnerClass1{
+        private static SingletonInnerClass singletonInnerClass = new SingletonInnerClass();
+    }
+
+    public static SingletonInnerClass getSingleton(){
+        return SingletonInnerClass1.singletonInnerClass;
+    }
+}
 
 class Singleton{
 
