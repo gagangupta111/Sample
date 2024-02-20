@@ -1,6 +1,13 @@
 package com.async;
 
 import org.asynchttpclient.*;
+
+import java.io.FileNotFoundException;
+import java.net.URI;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 

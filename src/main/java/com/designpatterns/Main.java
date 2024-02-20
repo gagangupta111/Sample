@@ -1,7 +1,5 @@
 package com.designpatterns;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -46,7 +44,7 @@ public class Main {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (int i = 0 ; i < 10; i++){
             executorService.submit(() -> {
-                SingletonInnerClass singleton = SingletonInnerClass.getSingleton();
+                SingletonUsingInnerClass singleton = SingletonUsingInnerClass.getSingleton();
                 System.out.println(singleton);
             });
         }
@@ -84,18 +82,18 @@ class Employee{
     }
 }
 
-class SingletonInnerClass{
+class SingletonUsingInnerClass {
 
-    private SingletonInnerClass(){
+    private SingletonUsingInnerClass(){
 
     }
 
-    private static class SingletonInnerClass1{
-        private static SingletonInnerClass singletonInnerClass = new SingletonInnerClass();
+    private static class InnerStaticClass {
+        private static SingletonUsingInnerClass singletonUsingInnerClass = new SingletonUsingInnerClass();
     }
 
-    public static SingletonInnerClass getSingleton(){
-        return SingletonInnerClass1.singletonInnerClass;
+    public static SingletonUsingInnerClass getSingleton(){
+        return InnerStaticClass.singletonUsingInnerClass;
     }
 }
 

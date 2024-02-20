@@ -1,5 +1,8 @@
 package com;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Sample {
 
     public static void swap(int[] array, int begIndex, int endIndex){
@@ -36,14 +39,25 @@ public class Sample {
 
     public static void main(String[] args){
 
-        int[] array = {0,0,0,1,0,1,0,1,0,1};
-        System.out.println(array.length);
-        sort(array);
 
-        for (int i : array){
-            System.out.println(i);
+        String string = "abcabca";
+        Map<Character, Integer> map = new HashMap<>();
+        int length = string.length();
+
+        for (int i = 0 ; i < length; i++){
+            Character c = string.charAt(i);
+            if (!map.containsKey(c)){
+                map.put(c, 1);
+            }else {
+                map.put(c, map.get(c)+1);
+            }
         }
 
-        System.out.println(array.length);
+        for (Character c : map.keySet()){
+            System.out.println(c + " ___ " + map.get(c));
+        }
+
+
+
     }
 }
