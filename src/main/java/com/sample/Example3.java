@@ -1,72 +1,75 @@
 
 package com.sample;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 public class Example3 {
 
+    public boolean hasPathSum(TreeNode root, int targetSum) {
 
-    public static void adjust(int[] nums, int prevIndex, int currentIndex) {
+        if (root.val == targetSum){
+            if (root.left == null && root.right == null){
+                return true;
+            }
+        }else if (root.val > targetSum){
+            return false;
+        }
 
-        nums[prevIndex] = nums[currentIndex];
+        boolean isSum = hasPathSum(root.left, targetSum, root.val);
+        if (isSum){
+            return isSum;
+        }
 
+        isSum = hasPathSum(root.right, targetSum, root.val);
+        if (isSum){
+            return isSum;
+        };
+        return false;
     }
-    public static int removeDuplicates(int[] nums) {
 
-        int length = nums.length;
-        int previous = nums[0];
-        int prevIndex = 0;
-        for (int i = 1 ; i < length; i++){
-            if (nums[i] == previous){
-                continue;
+    public boolean hasPathSum(TreeNode root, int targetSum, int currentSum) {
+
+        if (root == null){
+            return false;
+        }
+        if (currentSum+root.val == targetSum){
+            if (root.left == null && root.right == null){
+                return true;
             }
-            if ( i - prevIndex > 1 ){
-                prevIndex++;
-                adjust(nums, prevIndex, i);
-                prevIndex = prevIndex+1;
-                previous = nums[i];
-            }else {
-                previous = nums[i];
-                prevIndex = i;
-            }
+        }else if (currentSum+root.val > targetSum){
+            return false;
         }
 
-        int total = length - prevIndex;
-        while (prevIndex < length){
-            nums[prevIndex++] = 0;
+        boolean isSum = hasPathSum(root.left, targetSum, currentSum+root.val);
+        if (isSum){
+            return isSum;
         }
-        return total;
-
+        isSum = hasPathSum(root.right, targetSum, currentSum+root.val);
+        if (isSum){
+            return isSum;
+        }
+        return false;
     }
 
     public static void main(String[] args){
 
-        int[] array = {1,1,2,3,4,4};
-        int total = removeDuplicates(array);
-        for (int i : array){
-            System.out.println(i);
-        }
-        System.out.println(total);
+        Example3 example3 = new Example3();
+        TreeNode root = new TreeNode();
+        root.val = 1;
 
-        OptionalInt xyz = Arrays.stream(array).reduce((a, b) -> a+b);
-        System.out.println("optional int  : " + xyz.getAsInt());
+        root.left = new TreeNode();
+        root.left.val = 2;
 
-        List<String> strings = new ArrayList<>();
-        strings.add("Hello");
-        strings.add("Ram");
-        strings.add("Hello");
-        strings.add("Sam");
-        strings.add("Hello");
-        strings.add("Yam");
-        strings.add("Hello");
-        strings.add("Raj");
-        strings.add("Hello");
-        strings.add("Raj");
-        Map<String, Long> countMap = strings.stream()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        root.right = new TreeNode();
+        root.right.val = 3;
+
+        root.left.left = new TreeNode();
+        root.left.left.val = 4;
+
+        System.out.println(example3.hasPathSum(root, 4));
+        System.out.println(example3.hasPathSum(root, 5));
+        System.out.println(example3.hasPathSum(root, 6));
+        System.out.println(example3.hasPathSum(root, 7));
+        System.out.println(example3.hasPathSum(root, 8));
+        System.out.println(example3.hasPathSum(root, 9));
 
     }
-
 }

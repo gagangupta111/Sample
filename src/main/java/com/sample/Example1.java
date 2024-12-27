@@ -1,3 +1,4 @@
+/*
 
 package com.sample;
 
@@ -102,7 +103,7 @@ public class Example1 {
     }
     public static void multiThread(){
 
-        Resource resource =  new Resource();
+        ResourceClass resource =  new ResourceClass();
         for (int i = 0; i < 10; i++){
             Thread thread = new Thread(new GetResource(resource));
             thread.start();
@@ -123,9 +124,9 @@ public class Example1 {
 
 class SetResource implements Runnable{
 
-    private Resource resource;
+    private ResourceClass resource;
 
-    public SetResource(Resource resource) {
+    public SetResource(ResourceClass resource) {
         this.resource = resource;
     }
 
@@ -149,9 +150,9 @@ class SetResource implements Runnable{
 
 class GetResource implements Runnable{
 
-    private Resource resource;
+    private ResourceClass resource;
 
-    public GetResource(Resource resource) {
+    public GetResource(ResourceClass resource) {
         this.resource = resource;
     }
 
@@ -201,3 +202,4 @@ class Resource{
 
     }
 }
+*/
