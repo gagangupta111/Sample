@@ -56,7 +56,6 @@ public class Sample {
 
         Thread.sleep(5000);
         start.countDown();
-
         end.await();
 
         System.out.println("Main done!");
