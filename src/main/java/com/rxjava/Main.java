@@ -1,6 +1,7 @@
 package com.rxjava;
 
 import rx.Observable;
+import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 import rx.subjects.ReplaySubject;
@@ -8,7 +9,7 @@ import rx.subjects.ReplaySubject;
 public class Main {
 
     public static void main(String[] args) throws Exception{
-        replaySubject();
+        immediateSchedulers();
     }
 
     public static void observable(){
@@ -19,8 +20,8 @@ public class Main {
         observable
                 .map(s -> s.toUpperCase())
                 .filter(s -> s.startsWith("R"))
-                .subscribe(
-                        System.out::println,  // onNext
+                .subscribe( a ->
+                        System.out.println(a),  // onNext
                         throwable -> System.err.println("Error: " + throwable.getMessage()),  // onError
                         () -> System.out.println("Completed!")  // onComplete
                 );
@@ -99,7 +100,6 @@ public class Main {
 
     }
 
-
     public static void replaySubject() throws Exception{
 
         final StringBuilder result1 = new StringBuilder();
@@ -133,4 +133,91 @@ public class Main {
         System.out.println(result3);
 
     }
+
+    public static void trampolineSchedulers() throws Exception{
+
+        Observable.just("A", "AB", "ABC")
+                .flatMap(v -> observableCreationWithDelay(v)
+                        .doOnNext(s -> System.out.println("Processing Thread : "
+                                + Thread.currentThread().getName()))
+                        .subscribeOn(Schedulers.trampoline()))
+                .subscribe(item -> System.out.println("Receiver Thread : "
+                        + Thread.currentThread().getName()
+                        + ", Item : " + item));
+
+        Thread.sleep(1000);
+
+    }
+
+    public static void newThreadSchedulers() throws Exception{
+
+        Observable.just("A", "AB", "ABC", "hgjh", "kjgjhgj")
+                .flatMap(v -> observableCreationWithDelay(v)
+                        .doOnNext(s -> System.out.println("Processing Thread : "
+                                + Thread.currentThread().getName()))
+                        .subscribeOn(Schedulers.newThread()))
+                .subscribe(item -> System.out.println("Receiver Thread : "
+                        + Thread.currentThread().getName()
+                        + ", Item : " + item));
+
+        Thread.sleep(1000);
+
+    }
+
+    public static void computationsSchedulers() throws Exception{
+
+        Observable.just("A", "AB", "ABC", "kjhgh", "jhgfhjk")
+                .flatMap(v -> observableCreationWithDelay(v)
+                        .doOnNext(s -> System.out.println("Processing Thread : "
+                                + Thread.currentThread().getName()))
+                        .subscribeOn(Schedulers.computation()))
+                .subscribe(item -> System.out.println("Receiver Thread : "
+                        + Thread.currentThread().getName()
+                        + ", Item : " + item));
+
+        Thread.sleep(1000);
+
+    }
+
+    public static void ioSchedulers() throws Exception{
+
+        Observable.just("A", "AB", "ABC", "kjhgh", "jhgfhjk")
+                .flatMap(v -> observableCreationWithDelay(v)
+                        .doOnNext(s -> System.out.println("Processing Thread : "
+                                + Thread.currentThread().getName()))
+                        .subscribeOn(Schedulers.io()))
+                .subscribe(item -> System.out.println("Receiver Thread : "
+                        + Thread.currentThread().getName()
+                        + ", Item : " + item));
+
+        Thread.sleep(1000);
+
+    }
+
+    public static void immediateSchedulers() throws Exception{
+
+        Observable.just("A", "AB", "ABC", "kjhgh", "jhgfhjk")
+                .flatMap(v -> observableCreationWithDelay(v)
+                        .doOnNext(s -> System.out.println("Processing Thread : "
+                                + Thread.currentThread().getName()))
+                        .subscribeOn(Schedulers.immediate()))
+                .subscribe(item -> System.out.println("Receiver Thread : "
+                        + Thread.currentThread().getName()
+                        + ", Item : " + item));
+
+        Thread.sleep(1000);
+
+    }
+
+    public static Observable<String> observableCreationWithDelay(String string){
+
+        try {
+            Thread.sleep(2000);
+        }catch (Exception e){
+            System.out.println("Exception:" + e.getMessage());
+        }
+
+        return Observable.just(string);
+    }
+
 }
