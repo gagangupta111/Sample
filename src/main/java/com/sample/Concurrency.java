@@ -98,7 +98,7 @@ public class Concurrency {
         ResourceClass resourceClass = new ResourceClass();
         ExecutorService executorService = Executors
                 .newFixedThreadPool(10);
-        for (int i = 0 ; i < 10; i++){
+        for (int i = 0 ; i < 2; i++){
             executorService.submit(new Producer(resourceClass, i+""));
             executorService.submit(new Consumer(resourceClass, i+""));
         }

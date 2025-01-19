@@ -1,23 +1,21 @@
+package com.executorService;
 
-package com.multi.sample1;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-class LatchExampleThread implements Runnable{
+class LatchExampleThreadNew implements Callable<String> {
 
     private CountDownLatch start;
     private CountDownLatch end;
 
-    public LatchExampleThread(CountDownLatch start, CountDownLatch end) {
+    public LatchExampleThreadNew(CountDownLatch start, CountDownLatch end) {
         this.start = start;
         this.end = end;
     }
 
     @Override
-    public void run() {
+    public String call() {
 
         Long l = Thread.currentThread().getId();
         System.out.println("Thread waiting : " + l);
@@ -36,12 +34,11 @@ class LatchExampleThread implements Runnable{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
+        return "Thread ID : " + l;
     }
 }
 
-public class Sample {
+public class Main {
 
     public static void main(String[] args) throws Exception{
 
@@ -49,9 +46,11 @@ public class Sample {
         CountDownLatch start = new CountDownLatch(1);
         CountDownLatch end = new CountDownLatch(20);
 
+        List<Future> list = new ArrayList<>();
         ExecutorService executorService = Executors.newFixedThreadPool(20);
         for (int i = 0 ; i < 20; i++){
-            executorService.submit(new Thread(new LatchExampleThread(start, end)));
+            Future<String> future = executorService.submit((new LatchExampleThreadNew(start, end)));
+            list.add(future);
         }
 
         Thread.sleep(5000);
@@ -68,6 +67,11 @@ public class Sample {
             }
         } catch (Exception e) {
             executorService.shutdownNow();
+        }
+
+        System.out.println("++++++++++++++++++++++++++++++++++++++");
+        for (Future future : list){
+            System.out.println(future.get());
         }
 
     }
