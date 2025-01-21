@@ -1,5 +1,8 @@
 package com.sample;
 
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
 import java.util.*;
 
 public class Example6 {
@@ -157,9 +160,20 @@ public class Example6 {
         }
     }
 
+    private static void clearReferences(ReferenceQueue queue) {
+        while (true) {
+            Reference reference = queue.poll();
+            if (reference == null) {
+                break; // no references to clear
+            }
+            // cleanup(reference);
+        }
+    }
+
     public static void main(String[] args){
 
-        String s = "0011";
-        System.out.println(isConsecutive(s, s.length(), 1, 1));
+        SoftReference<List<String>> listReference = new SoftReference<List<String>>(new ArrayList<String>());
+        listReference.get();
+
     }
 }
