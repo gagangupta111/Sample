@@ -1,4 +1,4 @@
-package com.sample;
+package com.multi.producerConsumer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +85,7 @@ class Consumer extends Thread{
     }
 }
 
-public class Concurrency {
+public class Main {
 
     public static void main(String[] args){
 
