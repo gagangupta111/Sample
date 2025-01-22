@@ -1,18 +1,15 @@
-package com.package2;
+package com.hackerrankAPI;
 
 import com.google.gson.*;
-import com.package1.Interface1;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
-public class Class1 implements Interface1 {
+public class Main {
 
     public static void main(String[] args){
 
