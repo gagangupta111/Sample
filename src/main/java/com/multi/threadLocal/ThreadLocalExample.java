@@ -2,7 +2,8 @@ package com.multi.threadLocal;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
- class MyRunnable implements Runnable {
+
+class MyRunnable implements Runnable {
 
     private static ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>();
 

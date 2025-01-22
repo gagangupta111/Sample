@@ -1,11 +1,39 @@
 package com.sample;
 
+import com.kaprekar.Main;
+
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.util.*;
 
 public class Example6 {
+
+    public static int nonDivisibleSubset(int k, List<Integer> s) {
+        // Write your code here
+
+        List<Integer> newList = new ArrayList<>();
+
+        int length = s.size();
+        for(int i = 0 ; i < length; i++){
+            int first = s.get(i);
+            for(int j = i+1 ; j < length; j++){
+                int second = s.get(j);
+                if((first + second) % k != 0){
+                    if (!newList.contains(first)){
+                        newList.add(first);
+                    }
+                    if (!newList.contains(second)){
+                        newList.add(second);
+                    }
+                }
+            }
+        }
+        if (newList.size() == length){
+            return length;
+        }
+        return nonDivisibleSubset(k, newList);
+    }
 
     public static int isConsecutive(String s, int length, int i, int yesTillLength) {
 
@@ -172,8 +200,10 @@ public class Example6 {
 
     public static void main(String[] args){
 
-        SoftReference<List<String>> listReference = new SoftReference<List<String>>(new ArrayList<String>());
-        listReference.get();
+        // List<Integer> list = List.of(278, 576, 496, 727, 410, 124, 338, 149, 209, 702, 282, 718, 771, 575,436);
+        // List<Integer> list = List.of(1,7,2,4);
+        List<Integer> list = List.of(19,10,12,10,24,25,22);
+        System.out.println(nonDivisibleSubset(4, list));
 
     }
 }

@@ -43,12 +43,13 @@ public class Main {
     public static void main(String[] args) throws Exception{
 
         System.out.println("Hello!");
+        int total = 20;
         CountDownLatch start = new CountDownLatch(1);
-        CountDownLatch end = new CountDownLatch(20);
+        CountDownLatch end = new CountDownLatch(total);
 
         List<Future> list = new ArrayList<>();
-        ExecutorService executorService = Executors.newFixedThreadPool(20);
-        for (int i = 0 ; i < 20; i++){
+        ExecutorService executorService = Executors.newFixedThreadPool(total);
+        for (int i = 0 ; i < total; i++){
             Future<String> future = executorService.submit((new LatchExampleThreadNew(start, end)));
             list.add(future);
         }

@@ -16,8 +16,57 @@ public class Class1 implements Interface1 {
 
     public static void main(String[] args){
 
-        System.out.println(longestDuration("empower integrated markets", "Reggae"));
+        // System.out.println(longestDuration("empower integrated markets", "Reggae"));
+        // String full = getPhoneNumbers("Afghanistan", "12345");
+        String full = getPhoneNumbers("Puerto Rico", "12345");
+        System.out.println(full);
+    }
 
+    public static String getPhoneNumbers(String country, String phoneNumber) {
+
+        try {
+            String callingCode = "";
+            String url =  "https://jsonmock.hackerrank.com/api/countries?name=";
+
+            String[] organizerArray = country.split(" ");
+            String countySpaceCorrected = Arrays.stream(organizerArray).map(String::valueOf).collect(Collectors.joining("%20"));
+
+            url += countySpaceCorrected;
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .build();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            JsonParser parser = new JsonParser();
+            Object obj = parser.parse(response.body());
+
+            JsonObject jsonObject = (JsonObject) obj;
+            JsonArray jsonArray = jsonObject.get("data").getAsJsonArray();
+            int size = jsonArray.size();
+
+            if (size == 0){
+                return "-1";
+            }
+
+            JsonObject data = jsonArray.get(0).getAsJsonObject();
+            JsonArray callingCodes = data.get("callingCodes").getAsJsonArray();
+
+            size = callingCodes.size();
+            if (size == 1){
+                callingCode = callingCodes.get(0).getAsString();
+            }else {
+                callingCode = callingCodes.get(size-1).getAsString();
+            }
+
+            return "+" + callingCode + " " + phoneNumber;
+
+        }catch (Exception exception){
+            System.out.println(exception.getLocalizedMessage());
+        }
+        return "-1";
     }
 
     public static String longestDuration(String organizer, String genre) {
