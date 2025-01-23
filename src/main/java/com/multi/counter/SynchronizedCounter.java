@@ -1,41 +1,34 @@
-package com.multi.volatileExample;
+package com.multi.counter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
-class CounterAtomic extends Thread {
+class SyncCounter extends Thread {
 
-    // Atomic counter Variable
-    AtomicInteger count;
-
-    // Constructor of class
-    CounterAtomic()
-    {
-        count = new AtomicInteger();
-    }
+    // Counter Variable
+    static volatile int count = 0;
 
     // method which would be called upon
     // the start of execution of a thread
-    public void run()
+    public synchronized void run()
     {
 
         int max = 100;
 
         // incrementing counter total of max times
         for (int i = 0; i < max; i++) {
-            count.addAndGet(1);
+            count++;
         }
     }
 }
 
-public class AtomicCounter {
+public class SynchronizedCounter {
     public static void main(String[] args)
             throws InterruptedException
     {
         long startTime = System.currentTimeMillis();
         // Instance of Counter Class
-        CounterAtomic c = new CounterAtomic();
+        SyncCounter c = new SyncCounter();
 
         ExecutorService executorService = Executors.newFixedThreadPool(20);
         for (int i = 0 ; i < 50; i++){
@@ -59,5 +52,3 @@ public class AtomicCounter {
         System.out.println("elapsedTime : " + elapsedTime);
     }
 }
-
-

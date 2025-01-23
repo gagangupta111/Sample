@@ -1,4 +1,4 @@
-package com.multi.volatileExample;
+package com.multi.counter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -1,21 +1,22 @@
-package com.multi.volatileExample;
+package com.volatileExample;
 
 public class Main {
     private static volatile int MY_INT = 0;
+    public static final int my_int_comparison = 5;
+    public static final int change_listener_sleep = 1000;
+    public static final int change_maker_sleep = 2000;
+    public static final int total_threads = 5;
 
     public static void main(String[] args)
     {
-        new ChangeListener().start();
-        new ChangeMaker().start();
+        for (int i = 0 ; i < total_threads; i++ ){
+            new ChangeListener().start();
+            new ChangeMaker().start();
+        }
+    }
 
-        new ChangeListener().start();
-        new ChangeMaker().start();
-
-        new ChangeListener().start();
-        new ChangeMaker().start();
-
-        new ChangeListener().start();
-        new ChangeMaker().start();
+    public static String currentTime(){
+        return System.currentTimeMillis() + "";
     }
 
     static class ChangeListener extends Thread {
@@ -24,16 +25,16 @@ public class Main {
         {
             Long id = Thread.currentThread().getId();
             int local_value = MY_INT;
-            while (local_value < 5) {
+            while (local_value < my_int_comparison) {
                 if (local_value != MY_INT) {
                     System.out.println(
-                            id + " Got Change for MY_INT : " + MY_INT);
+                            id + " Got Change for MY_INT : " + MY_INT + " : time : " + currentTime());
                     local_value = MY_INT;
                 }else {
-                    System.out.println(id + " No change");
+                    System.out.println(id + " No change" + " : time : " + currentTime());
                 }
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(change_listener_sleep);
                 }
                 catch (InterruptedException e) {
                     e.printStackTrace();
@@ -48,13 +49,11 @@ public class Main {
         {
             Long id = Thread.currentThread().getId();
             int local_value = MY_INT;
-            while (MY_INT < 5) {
-                System.out.println(
-                        id + " Incrementing MY_INT to : " +
-                                (local_value + 1));
+            while (MY_INT < my_int_comparison) {
+                System.out.println(id + " Incrementing MY_INT to : " + (local_value + 1) + " : time : " + currentTime());
                 MY_INT = ++local_value;
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(change_maker_sleep);
                 }
                 catch (InterruptedException e) {
                     e.printStackTrace();

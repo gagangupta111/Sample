@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 
-// Java code to explain double check locking
 class DoubleCheckingSingleton
 {
-    // private instance, so that it can be
-    // accessed by only by getInstance() method
     private static DoubleCheckingSingleton instance;
 
     private DoubleCheckingSingleton()
@@ -50,6 +47,7 @@ class DoubleCheckingSingleton
     private static class SingletonHolder {
         public static NotThreadSafe instance;
 
+        // https://stackoverflow.com/questions/17799976/why-is-static-inner-class-singleton-thread-safe
         public static NotThreadSafe getInstance() {
             if (null == instance) {
                 instance = new NotThreadSafe();
