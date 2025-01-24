@@ -1,9 +1,9 @@
 package com.generics;
 
-import com.sample.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+// this example will explain the complexities and purpose behind wildcards in generics
 
 // AB -> A1 -> A2
 // AB -> B1 -> B2
@@ -29,7 +29,7 @@ class Generic<T>{
     }
 }
 
-public class Main {
+public class GenericsWildCardExplained {
 
     public static void generics(){
         List<Generic> list = new ArrayList<>();

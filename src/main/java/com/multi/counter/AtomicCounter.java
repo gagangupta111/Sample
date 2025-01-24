@@ -4,6 +4,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+// there are many classes in this package : com.multi.counter
+// each is an implementation of using counter differently
+// below is using atomic counter
+// atomic counter use compare and swap mechanism behind the scene, which is synchronised automatically
+// hence separate synchronization is nor required
+
 class CounterAtomic extends Thread {
 
     // Atomic counter Variable

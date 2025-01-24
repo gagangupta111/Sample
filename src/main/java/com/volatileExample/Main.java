@@ -1,5 +1,10 @@
 package com.volatileExample;
 
+// this example explains How volatile helps boost visibility to all threads
+// we have taken an integer MY_INT which will be changed by change maker
+// all listeners will keep on checking any changes made to MY_INT
+// the changing and listening will be printed in console
+
 public class Main {
     private static volatile int MY_INT = 0;
     public static final int my_int_comparison = 5;
