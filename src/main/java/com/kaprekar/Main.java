@@ -7,6 +7,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+// this Program check the number of iterations it takes for any random number to transform into Kaprekar Number.
+// also, multithreading have been added to boost number of computations concurrently
+// CountDownLatch have been added to control the execution of threads
+
+// read about Kaprekar number here : https://en.wikipedia.org/wiki/Kaprekar_number
+
 class ThreadWay implements Runnable{
 
     private CountDownLatch start;
