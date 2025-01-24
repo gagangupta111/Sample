@@ -10,6 +10,8 @@ public class Example9 {
         System.out.println(findGCD(new int[]{2,5,7,3, 10}));
     }
 
+
+
     public static int findGCD(int[] nums) {
 
         Arrays.sort(nums);

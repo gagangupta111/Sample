@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 
-// this explain illustrates different ways to create singleton
+// below code illustrates different ways to create singleton
 // the thread safe mechanism in singleton
 // some common mistakes while implementing thread safe mechanism in singleton
 
@@ -92,7 +92,7 @@ class LatchSingleton implements Callable<String> {
     }
 }
 
-public class Main {
+public class ConcurrentCreationSingleton {
 
     public static void main(String[] args) throws Exception{
 
