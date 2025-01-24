@@ -9,6 +9,10 @@ import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+// below code is a sample display of how HackerRank API works
+// it illustrates : calling APIs, transforming results from JSON to Objects
+// and doing required computation to achieve final result
+
 public class Main {
 
     public static void main(String[] args){
