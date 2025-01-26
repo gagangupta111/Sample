@@ -112,6 +112,11 @@ public class Main {
         dataList.add(new Data("2", 2, 2));
         dataList.add(new Data("3", 3, 3));
 
+        // reduction operator depends upon the result to be of same kind
+        System.out.println("++++++++ list reduce to max ++++++++++");
+        List<Integer> list = new ArrayList<>();
+        System.out.println("max  : " + list.stream().reduce((data, data2) -> data2 > data ? data2 : data));
+
         System.out.println("++++++++map filtering++++++++++");
         Map<String, Long> mapFiltering = dataList.stream().collect(Collectors.groupingBy(
                 a -> a.getName(),
