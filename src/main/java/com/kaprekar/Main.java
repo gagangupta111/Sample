@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 // read about Kaprekar number here : https://en.wikipedia.org/wiki/Kaprekar_number
 
-class ThreadWay implements Runnable{
+class KaprekarNumberMultiThreaded implements Runnable{
 
     private CountDownLatch start;
     private CountDownLatch end;
@@ -21,7 +21,7 @@ class ThreadWay implements Runnable{
     private Map<String, Integer> map;
     private int randomInt;
 
-    public ThreadWay(CountDownLatch start, CountDownLatch end, Map<String, Integer> map, int randomInt) {
+    public KaprekarNumberMultiThreaded(CountDownLatch start, CountDownLatch end, Map<String, Integer> map, int randomInt) {
         this.start = start;
         this.end = end;
         this.map = map;
@@ -35,7 +35,7 @@ class ThreadWay implements Runnable{
             start.await();
             int totalIterations = 0;
             String returnString = Main.descending(String.valueOf(randomInt));
-            while (!returnString.equals(Main.kaprekarMax)){
+            while (!returnString.equals(Main.kaprekarNumberDescendingOrder)){
                 totalIterations++;
                 returnString = String.valueOf(Integer.valueOf(returnString) - Integer.valueOf(Main.ascending(returnString)));
                 returnString = Main.descending(returnString);
@@ -49,7 +49,7 @@ class ThreadWay implements Runnable{
 public class Main {
 
     public static final String kaprekarCombination = "6174";
-    public static final String kaprekarMax = "7641";
+    public static final String kaprekarNumberDescendingOrder = "7641";
 
     public static void main(String[] args){
 
@@ -63,7 +63,7 @@ public class Main {
         for (int i = 0 ; i < totalThreads; i++){
             Random random = new Random();
             int randomInt = random.nextInt(9999-999) + 999;
-            executorService.submit(new Thread(new ThreadWay(start, end, sortedMap, randomInt)));
+            executorService.submit(new Thread(new KaprekarNumberMultiThreaded(start, end, sortedMap, randomInt)));
         }
 
         try {
