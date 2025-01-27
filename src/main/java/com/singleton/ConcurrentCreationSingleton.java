@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 // below code illustrates different ways to create singleton
 // the thread safe mechanism in singleton
 // some common mistakes while implementing thread safe mechanism in singleton
-// proof of concept by cross check using multithreading : multiple instances
+// proof of concept by creation of multiple instances using multithreading and countdown latch
 
 // type 1
 class DoubleCheckingSingleton
@@ -119,14 +119,14 @@ public class ConcurrentCreationSingleton {
 
     public static void main(String[] args) throws Exception{
 
-        int total = 300;
+        int totalThreads = 300;
         System.out.println("Hello!");
         CountDownLatch start = new CountDownLatch(1);
-        CountDownLatch end = new CountDownLatch(total);
+        CountDownLatch end = new CountDownLatch(totalThreads);
 
         List<Future> list = new ArrayList<>();
-        ExecutorService executorService = Executors.newFixedThreadPool(total);
-        for (int i = 0 ; i < total; i++){
+        ExecutorService executorService = Executors.newFixedThreadPool(totalThreads);
+        for (int i = 0 ; i < totalThreads; i++){
             Future<String> future = executorService.submit((new LatchSingleton(start, end)));
             list.add(future);
         }
@@ -140,7 +140,8 @@ public class ConcurrentCreationSingleton {
 
         executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+            while (!executorService.isShutdown()) {
+                Thread.sleep(2000);
                 executorService.shutdownNow();
             }
         } catch (Exception e) {
