@@ -3,7 +3,6 @@ package com.rateLimit;
 import java.util.ArrayList;
 import java.util.List;
 
-
 class HitThread implements Runnable{
 
     Counter counter;
@@ -114,7 +113,5 @@ public class Main {
             }
             new Thread(new HitThread(counter)).start();
         }
-
     }
-
 }
