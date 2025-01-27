@@ -7,6 +7,9 @@ import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 import rx.subjects.ReplaySubject;
 
+// below code illustrates different way to use observables
+// various publishers, subscribers classes and objects, with their way of behaving
+
 class ObserverClass implements Observer<String>{
 
     public static Integer commonInteger = new Integer(100);

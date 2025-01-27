@@ -3,30 +3,33 @@ package com.rateLimit;
 import java.util.ArrayList;
 import java.util.List;
 
-class HitThread implements Runnable{
+// below code demonstrates a sample rate limiter, nothing complex, a very simple one
+// just creating a list of timestamps, searching binary into that and finding a timestamp within a window
 
-    Counter counter;
+class Thread_Hit implements Runnable{
 
-    public HitThread(Counter counter) {
-        this.counter = counter;
+    BasicStructure basicStructure;
+
+    public Thread_Hit(BasicStructure basicStructure) {
+        this.basicStructure = basicStructure;
     }
 
     @Override
     public void run() {
         Long id = Thread.currentThread().getId();
-        boolean success = counter.hit(id + "");
+        boolean success = basicStructure.hit(id + "");
         while (!success){
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            success = counter.hit(id + "");
+            success = basicStructure.hit(id + "");
         }
     }
 }
 
-class Counter{
+class BasicStructure {
 
     public static final int window = 5000; // 100 milliseconds
     public static final int hitLimit = 5; // 10 hits allowed in above window
@@ -39,7 +42,7 @@ class Counter{
 
         // get current time
         Long currentTime = System.currentTimeMillis();
-        boolean success = hitDetails(currentTime, allHitsLogs);
+        boolean success = hitAttemptWithDetails(currentTime, allHitsLogs);
 
         if (success){
             System.out.println("Thread ID : " + threadID + " Success ! ");
@@ -49,11 +52,11 @@ class Counter{
         return success;
     }
 
-    public boolean hitDetails(Long time, List<Long> allHitsLogs){
+    public boolean hitAttemptWithDetails(Long time, List<Long> allHitsLogs){
 
         // check count of all previous hits in that window defined
         // using binary search
-        // success or false do action
+        // success or false : do action
 
         int size = allHitsLogs.size();
         if (size < hitLimit){
@@ -101,17 +104,20 @@ class Counter{
     }
 }
 
-public class Main {
+public class RateLimiterMain {
 
     public static void main(String[] args) throws InterruptedException {
 
-        Counter counter = new Counter();
+        BasicStructure basicStructure = new BasicStructure();
+
+        // a simple loop to create threads, otherwise Executor service and countdown latch can also be used.
         for (int i = 0 ; i < 100; i++){
+            // just delaying new threads creations
             if (i % 15 == 0){
                 System.out.println("Sleeping!");
                 Thread.sleep(1000);
             }
-            new Thread(new HitThread(counter)).start();
+            new Thread(new Thread_Hit(basicStructure)).start();
         }
     }
 }
