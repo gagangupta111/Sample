@@ -5,6 +5,8 @@ import java.util.function.BinaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+// below code demonstrates various ways to use groupingBy in streams
+
 class Pair{
 
     public String name;
@@ -118,6 +120,7 @@ public class Main {
         System.out.println("max  : " + list.stream().reduce((data, data2) -> data2 > data ? data2 : data));
 
         System.out.println("++++++++map filtering++++++++++");
+        // filtering somehow not working, need to check
         Map<String, Long> mapFiltering = dataList.stream().collect(Collectors.groupingBy(
                 a -> a.getName(),
                 Collectors.counting()));
@@ -184,7 +187,6 @@ public class Main {
             System.out.println("key : " + data.getName() + " : " + data.getId() + " value : " + mapByNewData.get(data));
             mapByNewData.get(data).stream().forEach((a) -> System.out.println(a.getId()));
         }
-        System.out.println("++++++++++++++++++");
 
     }
 
