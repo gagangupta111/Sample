@@ -17,9 +17,16 @@ public class QueensAttack {
         for (int i = 1; i < 9; i++){
 
             list = returnDots(n, r_q, c_q, i);
+            List<List<Integer>> filtered = new ArrayList<>();
 
-            List<List<Integer>> finalList = list;
-            List<List<Integer>> filtered = obstacles.stream().filter(a -> finalList.contains(a)).collect(Collectors.toList());
+            for (List<Integer> obs : obstacles){
+                if (list.contains(obs)){
+                    filtered.add(obs);
+                }
+            }
+
+            obstacles.remove(filtered);
+
             for (List<Integer> obstacle : filtered){
                 list.removeAll(returnDots(n, obstacle.get(0), obstacle.get(1), i));
                 list.remove(obstacle);

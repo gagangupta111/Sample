@@ -1,8 +1,6 @@
 package com.sample;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Example10 {
 
@@ -53,10 +51,28 @@ public class Example10 {
 
     public static void main(String[] args){
 
-        Map<String, Integer> map = getAllCounts("abc acb def fed ghi");
-        for (String s : map.keySet()){
-            System.out.println("Key : " + s + "__" + map.get(s));
+
+        HashMap<String,String> map = new HashMap<String,String>(){
+            {
+                put("1", "ONE");
+                put("2", "TWO");
+                put("3", "THREE");
+            }
+        };
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+
+        Collection<String> unmodifiableCollection = Collections.unmodifiableCollection(list);
+        list.add("4");
+
+        for (String string : unmodifiableCollection){
+            System.out.println(string);
         }
+
+        List<Integer> integerList = List.of(1,2,3);
+        integerList.add(4);
 
     }
 

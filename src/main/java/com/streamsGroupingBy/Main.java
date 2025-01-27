@@ -1,4 +1,4 @@
-package com.streams;
+package com.streamsGroupingBy;
 
 import java.util.*;
 import java.util.function.BinaryOperator;

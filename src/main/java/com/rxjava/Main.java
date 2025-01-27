@@ -1,18 +1,62 @@
 package com.rxjava;
 
 import rx.Observable;
+import rx.Observer;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 import rx.subjects.ReplaySubject;
 
+class ObserverClass implements Observer<String>{
+
+    public static Integer commonInteger = new Integer(100);
+    private final Integer id;
+
+    public ObserverClass(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public void onCompleted() {
+        System.out.println("ID : " + id + " Completed! ");
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        System.err.println("Error: " + throwable.getMessage());
+    }
+
+    @Override
+    public void onNext(String string) {
+        System.out.println("ID : " + id + " data  : " + string);
+    }
+}
+
 public class Main {
 
     public static void main(String[] args) throws Exception{
-        immediateSchedulers();
+        observableClass();
     }
 
-    public static void observable(){
+    public static void observableClass(){
+
+        Observable<String> observable = Observable.just("Hello", "RxJava", "World", "R1", "R2");
+
+        Observer observer1 = new ObserverClass(101);
+        Observer observer2 = new ObserverClass(102);
+
+        // Creating an Observer
+        observable
+                .map(s -> s.toUpperCase())
+                .filter(s -> s.startsWith("R"))
+                .subscribe( observer1);
+
+        observable.subscribe(observer2);
+
+
+    }
+
+    public static void observableNaive(){
 
         Observable<String> observable = Observable.just("Hello", "RxJava", "World", "R1", "R2");
 
@@ -21,7 +65,7 @@ public class Main {
                 .map(s -> s.toUpperCase())
                 .filter(s -> s.startsWith("R"))
                 .subscribe( a ->
-                        System.out.println(a),  // onNext
+                                System.out.println(a),  // onNext
                         throwable -> System.err.println("Error: " + throwable.getMessage()),  // onError
                         () -> System.out.println("Completed!")  // onComplete
                 );
