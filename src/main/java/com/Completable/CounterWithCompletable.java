@@ -8,6 +8,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
+// below code demonstrates how Completable can also work similar to Thread/Runnable
+// by creating supplier instead of Thread/Runnable
+
 public class CounterWithCompletable {
     public static void main(String[] args)
             throws InterruptedException

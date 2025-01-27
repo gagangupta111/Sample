@@ -4,6 +4,8 @@ import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+// just a sample code trying completable
+
 class MySupplier implements Supplier<Integer> {
 
     @Override

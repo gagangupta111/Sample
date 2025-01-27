@@ -9,7 +9,9 @@ import java.util.concurrent.*;
 // below code illustrates different ways to create singleton
 // the thread safe mechanism in singleton
 // some common mistakes while implementing thread safe mechanism in singleton
+// proof of concept by cross check using multithreading : multiple instances
 
+// type 1
 class DoubleCheckingSingleton
 {
     private static DoubleCheckingSingleton instance;
@@ -37,6 +39,7 @@ class DoubleCheckingSingleton
         return instance;
     }
 }
+// type 2
  class BillPughSingleton  {
     private static class SingletonHolder {
         public static final BillPughSingleton instance = new BillPughSingleton();
@@ -47,6 +50,7 @@ class DoubleCheckingSingleton
     }
 }
 
+// type 3
  class NotThreadSafe {
     private static class SingletonHolder {
         public static NotThreadSafe instance;
@@ -65,6 +69,24 @@ class DoubleCheckingSingleton
     }
 }
 
+// type 4
+class BillPughUnsafeSingleton {
+    private static class SingletonHolder {
+        public static BillPughUnsafeSingleton instance;
+
+        public static BillPughUnsafeSingleton getInstance() {
+            if (null == instance) {
+                instance = new BillPughUnsafeSingleton();
+            }
+            return instance;
+        }
+    }
+
+    public static BillPughUnsafeSingleton getInstance() {
+        return SingletonHolder.getInstance();
+    }
+}
+
 class LatchSingleton implements Callable<String> {
 
     private CountDownLatch start;
@@ -79,10 +101,11 @@ class LatchSingleton implements Callable<String> {
     public String call() {
 
         Long l = Thread.currentThread().getId();
-        NotThreadSafe singleton;
+        // just change this variable type to different singletons classes and see How many gets created
+        BillPughUnsafeSingleton singleton;
         try {
             start.await();
-            singleton = NotThreadSafe.getInstance();
+            singleton = BillPughUnsafeSingleton.getInstance();
             end.countDown();
 
         } catch (InterruptedException e) {
@@ -130,6 +153,7 @@ public class ConcurrentCreationSingleton {
             set.add(future.get().toString());
         }
 
+        System.out.println(" Total Singleton Objects created : " + set.size());
         for (String string : set){
             System.out.println(string);
         }

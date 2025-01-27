@@ -6,6 +6,8 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+// below code demonstrates how pub/sub design pattern can be achieved using wait/notify mechanism of basic multithreading
+
 class ResourceClass {
 
     public List<String> strings = new ArrayList<>();
@@ -24,6 +26,7 @@ class Producer extends Thread{
 
     public void run(){
 
+        // while true helps Achieve : How one single thread keep on working indefinitely, otherwise would need to create multiple threads
         while (true){
         synchronized (resourceClass){
                 while (resourceClass.strings.size() > 30){
