@@ -1,4 +1,4 @@
-package com.multi;
+package com.multi.samples;
 
 import java.util.concurrent.*;
 import java.util.function.Predicate;

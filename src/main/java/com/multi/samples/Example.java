@@ -1,4 +1,4 @@
-package com.multi;
+package com.multi.samples;
 
 import java.time.Duration;
 import java.time.Instant;
