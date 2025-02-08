@@ -4,9 +4,56 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+class ListNode {
+      int val;
+      ListNode next;
+      ListNode() {}
+      ListNode(int val) { this.val = val; }
+      ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
 
 public class Main {
+
+    public static ListNode mergeNodes(ListNode head) {
+
+        ListNode previous = null;
+        ListNode first = null;
+        ListNode current = null;
+        ListNode finalCurrentNode = null;
+        ListNode finalHeadNode = null;
+
+        int sum = 0;
+        boolean flag = true;
+
+        previous = head;
+        first = head.next;
+        current = first;
+
+        while (flag){
+            while (current != null && current.val != 0){
+                sum += current.val;
+                current = current.next;
+            }
+            if (current == null){
+                break;
+            }else {
+                first = new ListNode(sum);
+                if (finalHeadNode == null){
+                    finalHeadNode = first;
+                    finalCurrentNode = finalHeadNode;
+                }else {
+                    finalCurrentNode.next = first;
+                }
+                sum = 0;
+                previous.next = first;
+
+                previous = current;
+                first = current.next;
+                current = current.next;
+            }
+        }
+        return finalHeadNode;
+    }
 
     static class ComparatorIntArrays implements java.util.Comparator<List<Integer>>{
 
@@ -77,12 +124,18 @@ public class Main {
 
     public static void main(String[] args){
 
-        int[][] ints = new int[][]{{1,7},{2,7},{8,10},{11,18}};
-        ints = merge(ints);
-        for (int[] list : ints){
-            System.out.println(list[0] + " " + list[1]);
-        }
+        ListNode head = new ListNode(0);
+        head.next = new ListNode(5);
+        head.next.next = new ListNode(0);
+        head.next.next.next = new ListNode(9);
+        head.next.next.next.next = new ListNode(18);
+        head.next.next.next.next.next = new ListNode(0);
 
+        head = mergeNodes(head);
+        while (head != null){
+            System.out.println(head.val);
+            head = head.next;
+        }
     }
 
 }

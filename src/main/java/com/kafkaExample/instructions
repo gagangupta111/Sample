@@ -1,0 +1,9 @@
+
+/c/Users/gagan/Downloads/kafkaInstallations/apache-zookeeper-3.8.4-bin/apache-zookeeper-3.8.4-bin/bin
+./zkServer.sh start
+./zkServer.sh stop
+
+
+/c/Users/gagan/Downloads/kafkaInstallations/kafka-3.9.0-src/kafka-3.9.0-src
+./bin/kafka-server-start.sh config/server.properties
+./bin/kafka-server-stop.sh
