@@ -14,26 +14,26 @@ import java.util.concurrent.*;
 */
 
 // type 1 : synchronized double checking : thread safe
-class DoubleCheckingSingleton
+class DoubleChecking
 {
-    private static DoubleCheckingSingleton instance;
+    private static DoubleChecking instance;
 
-    private DoubleCheckingSingleton()
+    private DoubleChecking()
     {
         // private constructor
     }
 
-    public static DoubleCheckingSingleton getInstance()
+    public static DoubleChecking getInstance()
     {
         if (instance == null)
         {
             //synchronized block to remove overhead
-            synchronized (DoubleCheckingSingleton.class)
+            synchronized (DoubleChecking.class)
             {
                 if(instance==null)
                 {
                     // if instance is null, initialize
-                    instance = new DoubleCheckingSingleton();
+                    instance = new DoubleChecking();
                 }
 
             }
@@ -42,49 +42,56 @@ class DoubleCheckingSingleton
     }
 }
 // type 2 : inner static class : thread safe
- class BillPughSingleton  {
+ class InnerStatic {
     private static class SingletonHolder {
-        public static final BillPughSingleton instance = new BillPughSingleton();
+        public static final InnerStatic instance = new InnerStatic();
     }
 
-    public static BillPughSingleton getInstance() {
+    public static InnerStatic getInstance() {
         return SingletonHolder.instance;
     }
 }
 
 // type 3 : inner static class : not thread safe : requires double checking
- class NotThreadSafe {
+ class InnerStaticMistake {
     private static class SingletonHolder {
-        public static NotThreadSafe instance;
+        public static InnerStaticMistake instance;
 
         // https://stackoverflow.com/questions/17799976/why-is-static-inner-class-singleton-thread-safe
-        public static NotThreadSafe getInstance() {
+        public static InnerStaticMistake getInstance() {
             if (null == instance) {
-                instance = new NotThreadSafe();
+                instance = new InnerStaticMistake();
             }
             return instance;
         }
     }
 
-    public static NotThreadSafe getInstance() {
+    public static InnerStaticMistake getInstance() {
         return SingletonHolder.getInstance();
     }
 }
 
-// type 4 : same as type 3 : just name change
-class BillPughUnsafeSingleton {
+// type 4 : same as type 3 with double checking : thread safe
+class InnerStaticDoubleChecking {
     private static class SingletonHolder {
-        public static BillPughUnsafeSingleton instance;
-
-        public static BillPughUnsafeSingleton getInstance() {
-            if (null == instance) {
-                instance = new BillPughUnsafeSingleton();
+        public static InnerStaticDoubleChecking instance;
+        public static InnerStaticDoubleChecking getInstance()
+        {
+            if (instance == null)
+            {
+                synchronized (InnerStaticDoubleChecking.class)
+                {
+                    if(instance==null)
+                    {
+                        instance = new InnerStaticDoubleChecking();
+                    }
+                }
             }
             return instance;
         }
     }
 
-    public static BillPughUnsafeSingleton getInstance() {
+    public static InnerStaticDoubleChecking getInstance() {
         return SingletonHolder.getInstance();
     }
 }
@@ -103,10 +110,10 @@ class LatchSingleton implements Callable<String> {
     public String call() {
 
         // just change this variable type to different singletons classes and see How many gets created
-        BillPughUnsafeSingleton singleton;
+        DoubleChecking singleton;
         try {
             start.await();
-            singleton = BillPughUnsafeSingleton.getInstance();
+            singleton = DoubleChecking.getInstance();
             end.countDown();
 
         } catch (InterruptedException e) {
