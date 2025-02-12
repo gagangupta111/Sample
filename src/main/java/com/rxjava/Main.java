@@ -7,33 +7,10 @@ import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 import rx.subjects.ReplaySubject;
 
-// below code illustrates different way to use observables
-// various publishers, subscribers classes and objects, with their way of behaving
-
-class ObserverClass implements Observer<String>{
-
-    public static Integer commonInteger = new Integer(100);
-    private final Integer id;
-
-    public ObserverClass(Integer id) {
-        this.id = id;
-    }
-
-    @Override
-    public void onCompleted() {
-        System.out.println("ID : " + id + " Completed! ");
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-        System.err.println("Error: " + throwable.getMessage());
-    }
-
-    @Override
-    public void onNext(String string) {
-        System.out.println("ID : " + id + " data  : " + string);
-    }
-}
+/*
+    below code illustrates different way to use observables
+    various publishers, subscribers classes and objects, with their way of behaving
+*/
 
 public class Main {
 
@@ -43,7 +20,7 @@ public class Main {
 
     public static void observableClass(){
 
-        Observable<String> observable = Observable.just("Hello", "RxJava", "World", "R1", "R2");
+        Observable<String> observable = Observable.just("XYZ", "rx", "RX", "Asynchronous", "non-blocking");
 
         Observer observer1 = new ObserverClass(101);
         Observer observer2 = new ObserverClass(102);
@@ -61,7 +38,7 @@ public class Main {
 
     public static void observableNaive(){
 
-        Observable<String> observable = Observable.just("Hello", "RxJava", "World", "R1", "R2");
+        Observable<String> observable = Observable.just("XYZ", "rx", "RX", "Asynchronous", "non-blocking");
 
         // Creating an Observer
         observable
@@ -267,4 +244,29 @@ public class Main {
         return Observable.just(string);
     }
 
+}
+
+class ObserverClass implements Observer<String>{
+
+    public static Integer commonInteger = Integer.valueOf(100);
+    private final Integer id;
+
+    public ObserverClass(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public void onCompleted() {
+        System.out.println("ID : " + id + " Completed! ");
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        System.err.println("Error: " + throwable.getMessage());
+    }
+
+    @Override
+    public void onNext(String string) {
+        System.out.println("ID : " + id + " data  : " + string);
+    }
 }
