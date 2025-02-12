@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 
-// below code illustrates different ways to create singleton
-// the thread safe mechanism in singleton
-// some common mistakes while implementing thread safe mechanism in singleton
-// proof of concept by creation of multiple instances using multithreading and countdown latch
+/*
+    below code illustrates different ways to create singleton
+    the thread safe mechanism in singleton
+    some common mistakes while implementing thread safe mechanism in singleton
+    proof of concept by creation of multiple instances using multithreading and countdown latch
+*/
 
-// type 1
+// type 1 : synchronized double checking : thread safe
 class DoubleCheckingSingleton
 {
     private static DoubleCheckingSingleton instance;
@@ -39,7 +41,7 @@ class DoubleCheckingSingleton
         return instance;
     }
 }
-// type 2
+// type 2 : inner static class : thread safe
  class BillPughSingleton  {
     private static class SingletonHolder {
         public static final BillPughSingleton instance = new BillPughSingleton();
@@ -50,7 +52,7 @@ class DoubleCheckingSingleton
     }
 }
 
-// type 3
+// type 3 : inner static class : not thread safe : requires double checking
  class NotThreadSafe {
     private static class SingletonHolder {
         public static NotThreadSafe instance;
@@ -69,7 +71,7 @@ class DoubleCheckingSingleton
     }
 }
 
-// type 4
+// type 4 : same as type 3 : just name change
 class BillPughUnsafeSingleton {
     private static class SingletonHolder {
         public static BillPughUnsafeSingleton instance;
