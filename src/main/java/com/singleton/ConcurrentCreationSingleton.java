@@ -100,7 +100,6 @@ class LatchSingleton implements Callable<String> {
     @Override
     public String call() {
 
-        Long l = Thread.currentThread().getId();
         // just change this variable type to different singletons classes and see How many gets created
         BillPughUnsafeSingleton singleton;
         try {
