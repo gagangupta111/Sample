@@ -3,30 +3,47 @@ package com.Completable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-// below code demonstrates how Completable can also work similar to Thread/Runnable
-// by creating supplier instead of Thread/Runnable
+/*
+    below code demonstrates how CompletableFuture can also work similar to Thread/Runnable,
+    by creating Supplier instead of Thread/Runnable objects.
+
+    below code use ExecutorService to manage threads,
+    Supplier to create threads, CountDownLatch to control execution of threads.
+
+*/
 
 public class CounterWithCompletable {
+    public static int increments = 100;
     public static void main(String[] args)
             throws InterruptedException
     {
         int threads = 100;
-        CounterSupplier.max = 100;
+
+        CountDownLatch start = new CountDownLatch(1);
+        CountDownLatch end = new CountDownLatch(threads);
 
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
 
         List<CompletableFuture<Integer>> list = new ArrayList<>();
         for (int i = 0 ; i < threads; i++){
-            list.add(CompletableFuture.supplyAsync(new CounterSupplier(), executorService));
+            list.add(CompletableFuture.supplyAsync(new CounterSupplier(start, end), executorService));
         }
 
-        Thread.sleep(1000);
+        // delaying the start of threads
+        Thread.sleep(5000);
+
+        // count down started
+        start.countDown();
+
         boolean flag = false;
+        // loop to check if all threads are completed, this can be done by checking the countdown latch as well
+        // but checking the thread completion directly is more accurate
         while (!flag){
             flag = true;
             for (CompletableFuture<Integer> future : list){
@@ -36,8 +53,10 @@ public class CounterWithCompletable {
             Thread.sleep(1000);
         }
 
+        // all threads are done, hence printing
         System.out.println("Counter value : " + CounterSupplier.count);
 
+        // loop to shut down executorService
         executorService.shutdown();
         try {
             while (!executorService.isShutdown()) {
@@ -52,22 +71,32 @@ public class CounterWithCompletable {
 
 class CounterSupplier implements Supplier<Integer> {
 
+
+    CountDownLatch start;
+    CountDownLatch end;
+
+    public CounterSupplier(CountDownLatch start, CountDownLatch end) {
+        this.start = start;
+        this.end = end;
+    }
+
     public static AtomicInteger count = new AtomicInteger(0);
-    public static int max = 100;
 
     @Override
     public Integer get() {
-        try {
 
+        try {
+            String id = Thread.currentThread().getName();
+            System.out.println(id + " waiting to start ");
+            start.await();
             // incrementing counter
-            // total of max times
-            for (int i = 0; i < max; i++) {
+            for (int i = 0; i < CounterWithCompletable.increments; i++) {
                 count.getAndIncrement();
             }
             Thread.sleep(5000);
-        } catch (Exception e) {
-            //Do nothing
-        }
+            end.countDown();
+        } catch (Exception e) {}
+        // just returning, no business logic
         return 1;
     }
 }
