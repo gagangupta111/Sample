@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 /*
-    below code demonstrates how CompletableFuture can also work similar to Thread/Runnable,
+    Below code demonstrates how CompletableFuture can also work similar to Thread/Runnable,
     by creating Supplier instead of Thread/Runnable objects.
 
-    below code use ExecutorService to manage lifecycle of threads,
+    Below code use ExecutorService to manage lifecycle of threads,
     Supplier to create threads, CountDownLatch to control execution of threads.
 
 */

@@ -1,13 +1,28 @@
 package com.sample;
 
-public class Example11 {
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
+class Multi implements Runnable{
 
+    private CountDownLatch start;
+    private CountDownLatch end;
 
-    public static void main(String[] args){
+    private int randomInt;
 
-        System.out.println("hello!");
-
+    public Multi(CountDownLatch start, CountDownLatch end, Map<String, Integer> map, int randomInt) {
+        this.start = start;
+        this.end = end;
+        this.randomInt = randomInt;
     }
 
+    @Override
+    public void run() {
+
+        try {
+            start.await();
+            System.out.println(1);
+            end.countDown();
+        }catch (Exception e){}
+    }
 }
