@@ -1,4 +1,6 @@
 
+use linux/unix command utility
+
 /c/Users/gagan/Downloads/kafkaInstallations/apache-zookeeper-3.8.4-bin/apache-zookeeper-3.8.4-bin/bin
 ./zkServer.sh start
 ./zkServer.sh stop
